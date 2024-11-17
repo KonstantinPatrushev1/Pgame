@@ -63,7 +63,7 @@ public class SwordAttack : MonoBehaviour
         swordColliderObject.transform.position = (Vector2)transform.position + attackPosition;
         swordCollider.size = new Vector2(squareSize, squareSize);
 
-        yield return new WaitForSeconds(0.1f); // Длительность удара
+        yield return new WaitForSeconds(0.1f); // Длительность удар
         swordColliderObject.SetActive(false);
 
         yield return new WaitForSeconds(attackCooldown);
