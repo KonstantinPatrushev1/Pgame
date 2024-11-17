@@ -12,6 +12,7 @@ public class EnemyDeath : MonoBehaviour
             if (slime != null)
             {
                 slime.Die();
+                slime.SlowDown(2f);
             }
         }
     }

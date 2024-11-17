@@ -1,69 +1,97 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimationCharacter : MonoBehaviour
 {
-    public Sprite[] idleRight; // Анимация стояния направо
-    public Sprite[] idleLeft;  // Анимация стояния налево
-    public Sprite[] idleUp;    // Анимация стояния вверх
-    public Sprite[] idleDown;  // Анимация стояния вниз
-
-    public Sprite[] runRight;  // Анимация бега направо
-    public Sprite[] runLeft;   // Анимация бега налево
-    public Sprite[] runUp;     // Анимация бега вверх
-    public Sprite[] runDown;   // Анимация бега вниз
-
-    public float walkSpeed = 3.0f;  // Скорость ходьбы, зависит от движка игры
-
     private SpriteRenderer spriteRenderer;
-    private Vector2 movement;
 
-    private float animationTimer = 0f;
-    private int currentFrame = 0;
+    // Массивы спрайтов для каждой из анимаций (Idle и Run)
+    public Sprite[] idleUp, idleDown, idleLeft, idleRight;
+    public Sprite[] runUp, runDown, runLeft, runRight;
+
+    // Направление движения
+    private float directionX;
+    private float directionY;
+
+    // Проверка на движение
+    private bool isRunning;
+
+    // Переменные для анимации
+    private int currentIdleFrame;
+    private int currentRunFrame;
+    private float animationTimer;
+    public float animationSpeed = 0.1f;  // Время между сменой спрайтов (скорость анимации)
 
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();  // Получаем компонент SpriteRenderer
     }
 
     void Update()
     {
-        // Получаем движение игрока (например, с клавиш WASD или стрелки)
-        movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        
-        
+        // Получаем направления по осям
+        directionX = Input.GetAxisRaw("Horizontal");
+        directionY = Input.GetAxisRaw("Vertical");
+
+        // Проверка, движется ли персонаж
+        isRunning = directionX != 0 || directionY != 0;
+
+        // Обновляем анимацию
+        UpdateAnimation();
     }
 
-    void PlayRunningAnimation(Sprite[] runAnim)
+    private void UpdateAnimation()
     {
-        // Игрок бегает, воспроизводим анимацию бега
-        animationTimer += Time.deltaTime * walkSpeed;
-        if (animationTimer >= 0.1f) // Пауза между сменой спрайтов
+        if (isRunning)
         {
-            currentFrame++;
-            if (currentFrame >= runAnim.Length)
+            // Обновляем анимацию бега мгновенно, без таймеров
+            if (directionY > 0)  // Вверх
             {
-                currentFrame = 0; // Сбросить анимацию при достижении конца
+                spriteRenderer.sprite = runUp[currentRunFrame];
+                // Переход к следующему кадру
+                currentRunFrame = (currentRunFrame + 1) % runUp.Length;
             }
-
-            spriteRenderer.sprite = runAnim[currentFrame];
-            animationTimer = 0f;
+            else if (directionY < 0)  // Вниз
+            {
+                spriteRenderer.sprite = runDown[currentRunFrame];
+                currentRunFrame = (currentRunFrame + 1) % runDown.Length;
+            }
+            else if (directionX > 0)  // Вправо
+            {
+                spriteRenderer.sprite = runRight[currentRunFrame];
+                currentRunFrame = (currentRunFrame + 1) % runRight.Length;
+            }
+            else if (directionX < 0)  // Влево
+            {
+                spriteRenderer.sprite = runLeft[currentRunFrame];
+                currentRunFrame = (currentRunFrame + 1) % runLeft.Length;
+            }
+        }
+        else
+        {
+            // Обновляем анимацию стояния (idle) мгновенно, без таймеров
+            if (directionY > 0)  // Вверх
+            {
+                spriteRenderer.sprite = idleUp[0]; // Показываем первый кадр стояния вверх
+            }
+            else if (directionY < 0)  // Вниз
+            {
+                spriteRenderer.sprite = idleDown[0]; // Показываем первый кадр стояния вниз
+            }
+            else if (directionX > 0)  // Вправо
+            {
+                spriteRenderer.sprite = idleRight[0]; // Показываем первый кадр стояния вправо
+            }
+            else if (directionX < 0)  // Влево
+            {
+                spriteRenderer.sprite = idleLeft[0]; // Показываем первый кадр стояния влево
+            }
+            else  // Если персонаж стоит на месте
+            {
+                spriteRenderer.sprite = idleDown[0]; // Показываем первый кадр стояния вниз (по умолчанию)
+            }
         }
     }
 
-    void PlayIdleAnimation(Sprite[] idleAnim)
-    {
-        // Игрок стоит, воспроизводим анимацию стояния
-        animationTimer += Time.deltaTime * walkSpeed;
-        if (animationTimer >= 0.1f) // Пауза между сменой спрайтов
-        {
-            currentFrame++;
-            if (currentFrame >= idleAnim.Length)
-            {
-                currentFrame = 0; // Сбросить анимацию при достижении конца
-            }
-
-            spriteRenderer.sprite = idleAnim[currentFrame];
-            animationTimer = 0f;
-        }
-    }
 }
