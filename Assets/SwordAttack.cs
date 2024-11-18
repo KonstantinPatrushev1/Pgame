@@ -5,6 +5,7 @@ public class SwordAttack : MonoBehaviour
 {
     public float attackRange = 1f; // Дистанция удара
     public float attackCooldown = 0.5f; // Время между ударами
+    public float damage;
     private bool canAttack = true;
 
     public enum Direction { Up, Down, Left, Right }
@@ -17,6 +18,8 @@ public class SwordAttack : MonoBehaviour
     {
         // Создаем объект для коллайдера
         swordColliderObject = new GameObject("SwordCollider");
+        EnemyDeath enemyDeath = swordColliderObject.AddComponent<EnemyDeath>();
+        enemyDeath.damageValue = damage;
         swordCollider = swordColliderObject.AddComponent<BoxCollider2D>();
         swordCollider.isTrigger = true; // Устанавливаем как Trigger для проверки столкновений
         swordColliderObject.SetActive(false); // Изначально коллайдер выключен

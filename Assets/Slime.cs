@@ -1,69 +1,91 @@
 using UnityEngine;
+using System.Collections;
 
 public class Slime : MonoBehaviour
 {
-    public float moveSpeed = 3f; // Скорость движения слайма
-    public float detectionRadius = 5f; // Радиус, на котором слайм начнет двигаться к игроку
+    public float moveSpeed = 3f; // Нормальная скорость слайма
+    public float detectionRadius = 5f; // Радиус обнаружения игрока
     public float changeDirectionInterval = 2f; // Интервал для смены случайного направления
-    private float normalSpeed; // Переменная для хранения обычной скорости слайма
+    public float hp; // Здоровье слайма
 
+    private float normalSpeed; // Для хранения нормальной скорости
     private Transform player;
     private Vector2 randomDirection;
     private float timeToChangeDirection;
 
+    private Rigidbody2D rb; // Rigidbody2D компонента
+
     void Start()
     {
         normalSpeed = moveSpeed;
-        player = GameObject.FindWithTag("Player").transform; // Находим игрока по тегу
+        player = GameObject.FindWithTag("Player").transform; // Находим игрока
         timeToChangeDirection = changeDirectionInterval;
-        randomDirection = Random.insideUnitCircle.normalized; // Случайное направление
+        randomDirection = Random.insideUnitCircle.normalized; // Генерируем случайное направление
+        rb = GetComponent<Rigidbody2D>(); // Получаем Rigidbody2D
     }
 
     void Update()
     {
+        if (moveSpeed == 0) return; // Если движение временно отключено, ничего не делаем
+
         timeToChangeDirection -= Time.deltaTime;
 
         if (timeToChangeDirection <= 0)
         {
-            randomDirection = Random.insideUnitCircle.normalized; // Генерируем новое случайное направление
+            randomDirection = Random.insideUnitCircle.normalized; // Генерируем новое направление
             timeToChangeDirection = changeDirectionInterval;
         }
 
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position); // Расстояние до игрока
+        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
         if (distanceToPlayer <= detectionRadius)
         {
-            // Если игрок близко, слайм движется к нему
+            // Если игрок близко, следуем за ним
             Vector2 directionToPlayer = (player.position - transform.position).normalized;
             transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
         }
         else
         {
-            // Если игрок далеко, слайм двигается в случайном направлении
+            // Если игрок далеко, двигаемся случайно
             transform.position = Vector2.MoveTowards(transform.position, (Vector2)transform.position + randomDirection, moveSpeed * Time.deltaTime);
         }
     }
-    
-    public void Die()
+
+    public void Damage(float damage)
     {
-        Debug.Log("Slime is dying!"); // Выводим сообщение в консоль
-        // Запускаем задержку перед уничтожением
-        Invoke("DestroySlime", 0.5f); // Задержка в 0.5 секунд
+        hp -= damage;
+        if (hp <= 0)
+        {
+            Invoke("DestroySlime", 0.5f); // Уничтожаем слайма с задержкой
+        }
     }
 
     private void DestroySlime()
     {
-        Destroy(gameObject); // Уничтожаем объект слайма
+        Destroy(gameObject); // Уничтожаем объект
     }
 
-    public void SlowDown(float duration)
+    public void Knockback(Vector2 direction, float distance, float duration)
     {
-        moveSpeed = normalSpeed / 2; // Замедляем в 2 раза
-        Invoke("RestoreSpeed", duration); // Восстанавливаем скорость после заданного времени
+        if (rb != null)
+        {
+            float force = rb.mass * distance / duration;
+
+            // Сбрасываем скорость перед применением силы
+            rb.velocity = Vector2.zero;
+            rb.AddForce(direction.normalized * force, ForceMode2D.Impulse);
+
+            // Временно отключаем движение
+            StartCoroutine(DisableMovement(duration));
+        }
     }
 
-    private void RestoreSpeed()
+    private IEnumerator DisableMovement(float duration)
     {
-        moveSpeed = normalSpeed; // Восстанавливаем обычную скорость
+        moveSpeed = 0; // Останавливаем движение
+        yield return new WaitForSeconds(duration); // Ждем окончания "парализации"
+
+        rb.velocity = Vector2.zero; // Сбрасываем физическую скорость
+        moveSpeed = normalSpeed; // Восстанавливаем скорость
     }
 }
