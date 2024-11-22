@@ -7,6 +7,13 @@ public class Slime : MonoBehaviour
     public float detectionRadius = 5f; // Радиус обнаружения игрока
     public float changeDirectionInterval = 2f; // Интервал для смены случайного направления
     public float hp; // Здоровье слайма
+    public float lastHitTime = 0f; // Время последнего получения урона
+    public float damageCooldown = 0.3f; // Время, через которое слайм может получать следующий урон
+
+    // Параметры для отталкивания
+    public float knockbackDistance = 3f; // Расстояние отлета
+    public float knockbackDuration = 0.15f; // Время остановки движения
+    public float knockbackForceMultiplier = 1f; // Множитель силы отталкивания
 
     private float normalSpeed; // Для хранения нормальной скорости
     private Transform player;
@@ -50,26 +57,19 @@ public class Slime : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, (Vector2)transform.position + randomDirection, moveSpeed * Time.deltaTime);
         }
     }
-
-    public void Damage(float damage)
-    {
-        hp -= damage;
-        if (hp <= 0)
-        {
-            Invoke("DestroySlime", 0.5f); // Уничтожаем слайма с задержкой
-        }
-    }
+    
 
     private void DestroySlime()
     {
         Destroy(gameObject); // Уничтожаем объект
     }
 
+    // Универсальный метод для отталкивания
     public void Knockback(Vector2 direction, float distance, float duration)
     {
         if (rb != null)
         {
-            float force = rb.mass * distance / duration;
+            float force = rb.mass * distance / duration * knockbackForceMultiplier;
 
             // Сбрасываем скорость перед применением силы
             rb.velocity = Vector2.zero;
@@ -77,8 +77,13 @@ public class Slime : MonoBehaviour
 
             // Временно отключаем движение
             StartCoroutine(DisableMovement(duration));
+            if (hp <= 0)
+            {
+                DestroySlime();
+            }
         }
     }
+
 
     private IEnumerator DisableMovement(float duration)
     {

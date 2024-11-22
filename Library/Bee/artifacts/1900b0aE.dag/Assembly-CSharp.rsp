@@ -365,17 +365,17 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
-"Assets/AnimationCharacter.cs"
 "Assets/Cainos/Pixel Art Top Down - Basic/Script/CameraFollow.cs"
 "Assets/Cainos/Pixel Art Top Down - Basic/Script/LayerTrigger.cs"
 "Assets/Cainos/Pixel Art Top Down - Basic/Script/PropsAltar.cs"
 "Assets/Cainos/Pixel Art Top Down - Basic/Script/SpriteColorAnimation.cs"
 "Assets/Cainos/Pixel Art Top Down - Basic/Script/TopDownCharacterController.cs"
 "Assets/CameraFollow.cs"
-"Assets/EnemyDeath.cs"
 "Assets/movement.cs"
+"Assets/PlayerCollision.cs"
 "Assets/Slime.cs"
-"Assets/SwordAttack.cs"
+"Assets/SwordSpawner.cs"
+"Assets/WeaponManager.cs"
 -langversion:9.0
 /deterministic
 /optimize+

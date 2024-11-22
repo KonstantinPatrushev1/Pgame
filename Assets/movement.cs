@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class movement : MonoBehaviour
@@ -5,42 +6,36 @@ public class movement : MonoBehaviour
     public float moveSpeed = 5f;
     public Animator animator;
     private Rigidbody2D rb;
-    private Vector2 movementt;
-    private SwordAttack swordAttack; // Ссылка на объект SwordAttack
+    private Vector2 movementInput;
     private Vector2 velocity;
-    private bool isAttacking = false; // Флаг для проверки, атакует ли персонаж
+    private bool isAttacking = false; 
+    private float horizontal;  
+    private float vertical;    
+    private float lastAttackTime = -1f;  
+    public float attackCooldown = 0.5f;  
+
+    public float knockbackDistance = 3f; // Расстояние отлета
+    public float knockbackDuration = 0.15f; // Время отталкивания
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        swordAttack = GetComponent<SwordAttack>(); // Получаем ссылку на компонент SwordAttack
     }
 
     void Update()
     {
-        // Если персонаж атакует, движение блокируется
         if (isAttacking) return;
 
-        movementt.x = Input.GetAxisRaw("Horizontal");
-        movementt.y = Input.GetAxisRaw("Vertical");
+        movementInput.x = Input.GetAxisRaw("Horizontal");
+        movementInput.y = Input.GetAxisRaw("Vertical");
+        horizontal = animator.GetFloat("Horizontal");
+        vertical = animator.GetFloat("Vertical");
 
-        // Обновляем направление персонажа в SwordAttack
-        if (movementt.x > 0)
-            swordAttack.currentDirection = SwordAttack.Direction.Right;
-        else if (movementt.x < 0)
-            swordAttack.currentDirection = SwordAttack.Direction.Left;
-        else if (movementt.y > 0)
-            swordAttack.currentDirection = SwordAttack.Direction.Up;
-        else if (movementt.y < 0)
-            swordAttack.currentDirection = SwordAttack.Direction.Down;
-
-        // Обновляем velocity с movementt
-        velocity = movementt;
+        velocity = movementInput;
 
         UpdateAnimation();
 
-        // Проверка на нажатие ЛКМ для атаки
-        if (Input.GetMouseButtonDown(0) && !isAttacking) // Атака только если не атакует
+        if (Input.GetMouseButtonDown(0) && Time.time - lastAttackTime >= attackCooldown)
         {
             StartAttack();
         }
@@ -48,14 +43,13 @@ public class movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Если не атакует, то персонаж двигается
         if (!isAttacking)
         {
-            rb.velocity = movementt.normalized * moveSpeed;
+            rb.velocity = movementInput.normalized * moveSpeed;
         }
         else
         {
-            rb.velocity = Vector2.zero; // Прекращаем движение при атаке
+            rb.velocity = Vector2.zero;
         }
     }
 
@@ -72,27 +66,40 @@ public class movement : MonoBehaviour
             animator.SetBool("Walking", false);
         }
 
-        if (isAttacking)
-        {
-            animator.SetBool("Attack", true);
-        }
-        else
-        {
-            animator.SetBool("Attack", false);
-        }
+        animator.SetBool("Attack", isAttacking);
     }
 
     void StartAttack()
     {
-        if (isAttacking) return; // Если уже атакует, не запускаем атаку
+        WeaponManager weaponManager = GetComponent<WeaponManager>();
+        if (weaponManager != null && weaponManager.weaponId == -1) return;
+        if (isAttacking) return; 
 
-        isAttacking = true; // Включаем флаг атаки
-        animator.SetTrigger("Attack"); // Воспроизведение анимации удара
-        Invoke("EndAttack", 0.5f); // Завершаем атаку через 1 секунду (время длины анимации)
+        isAttacking = true; 
+        animator.SetTrigger("Attack"); 
+        lastAttackTime = Time.time;
+
+        float attackDuration = 0.25f;  
+        if (vertical < 0 && horizontal == 0)
+        {
+            Invoke(nameof(EndAttack), attackDuration - 0.07f);
+        }
+        else
+        {
+            Invoke(nameof(EndAttack), attackDuration);
+        }
     }
 
     void EndAttack()
     {
-        isAttacking = false; // Завершаем атаку, разрешаем движение и следующую атаку
+        isAttacking = false;
+    }
+
+    private IEnumerator DisableMovement(float duration)
+    {
+        float originalSpeed = moveSpeed;
+        moveSpeed = 0; // Останавливаем движение
+        yield return new WaitForSeconds(duration);
+        moveSpeed = originalSpeed; // Восстанавливаем движение
     }
 }
