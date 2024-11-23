@@ -13,6 +13,9 @@ public class movement : MonoBehaviour
     private float vertical;    
     private float lastAttackTime = -1f;  
     public float attackCooldown = 0.5f;  
+    private bool isKnockedBack = false;  // Флаг для отслеживания отталкивания
+    private Vector2 knockbackDirection;  // Направление отталкивания
+    private float knockbackTimeRemaining;  // Время до окончания отталкивания
 
     public float knockbackDistance = 3f; // Расстояние отлета
     public float knockbackDuration = 0.15f; // Время отталкивания
@@ -24,12 +27,13 @@ public class movement : MonoBehaviour
 
     void Update()
     {
-        if (isAttacking) return;
+        if (isAttacking || isKnockedBack) return;
 
         movementInput.x = Input.GetAxisRaw("Horizontal");
         movementInput.y = Input.GetAxisRaw("Vertical");
         horizontal = animator.GetFloat("Horizontal");
         vertical = animator.GetFloat("Vertical");
+        
 
         velocity = movementInput;
 
@@ -50,6 +54,16 @@ public class movement : MonoBehaviour
         else
         {
             rb.velocity = Vector2.zero;
+        }
+        if (isKnockedBack)
+        {
+            rb.velocity = knockbackDirection * (moveSpeed * 2f);  // Применяем отталкивание
+            knockbackTimeRemaining -= Time.deltaTime;
+
+            if (knockbackTimeRemaining <= 0)
+            {
+                isKnockedBack = false;  // Окончание отталкивания
+            }
         }
     }
 
@@ -101,5 +115,11 @@ public class movement : MonoBehaviour
         moveSpeed = 0; // Останавливаем движение
         yield return new WaitForSeconds(duration);
         moveSpeed = originalSpeed; // Восстанавливаем движение
+    }
+    public void ApplyKnockback(Vector2 direction, float distance, float duration)
+    {
+        isKnockedBack = true;
+        knockbackDirection = direction.normalized;
+        knockbackTimeRemaining = duration;
     }
 }

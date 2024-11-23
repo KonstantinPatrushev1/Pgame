@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-    public int weaponId = 0; // ID оружия
+    public int weaponId = -1; // ID оружия
     public Sprite weaponSprite; // Спрайт оружия
     public float damage; // Урон оружия
     public Vector2[] customCollider; // Коллайдер

@@ -19,6 +19,8 @@ public class Slime : MonoBehaviour
     private Transform player;
     private Vector2 randomDirection;
     private float timeToChangeDirection;
+    public float pushForce = 10f;
+    public float enemydamage;
 
     private Rigidbody2D rb; // Rigidbody2D компонента
 
@@ -93,4 +95,24 @@ public class Slime : MonoBehaviour
         rb.velocity = Vector2.zero; // Сбрасываем физическую скорость
         moveSpeed = normalSpeed; // Восстанавливаем скорость
     }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Проверяем, что объект имеет тег "Player"
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Находим направление от объекта к игроку
+            Vector2 pushDirection = collision.transform.position - transform.position;
+
+            // Нормализуем вектор и отталкиваем игрока
+            movement playerMovement = collision.gameObject.GetComponent<movement>();
+            PlayerInfo playerinfo = collision.gameObject.GetComponent<PlayerInfo>();
+            if (playerMovement != null)
+            {
+                playerinfo.SetDamage(enemydamage);
+                playerMovement.ApplyKnockback(pushDirection, knockbackDistance, knockbackDuration); // Применяем отталкивание
+            }
+        }
+    }
+
 }

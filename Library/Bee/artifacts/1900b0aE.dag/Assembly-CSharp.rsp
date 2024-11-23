@@ -373,6 +373,7 @@
 "Assets/CameraFollow.cs"
 "Assets/movement.cs"
 "Assets/PlayerCollision.cs"
+"Assets/PlayerInfo.cs"
 "Assets/Slime.cs"
 "Assets/SwordSpawner.cs"
 "Assets/WeaponManager.cs"

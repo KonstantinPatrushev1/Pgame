@@ -163,6 +163,8 @@ MonoBehaviour:
   knockbackDistance: 3
   knockbackDuration: 0.15
   knockbackForceMultiplier: 1
+  pushForce: 1
+  enemydamage: 30
 --- !u!61 &70620451
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -492,10 +494,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 155956608}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edce492792fc04f46a9ed0d05d590c48, type: 3}
+  m_Script: {fileID: 11500000, guid: 73ced7bff0686d140bf3e85e79e176e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 10
+  hp: 300
 --- !u!1 &420573665
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,7 +868,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 700671380}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b278dad62954b343b546d43d4533a78, type: 3}
   m_Name: 
@@ -880,6 +882,8 @@ MonoBehaviour:
   knockbackDistance: 3
   knockbackDuration: 0.15
   knockbackForceMultiplier: 1
+  pushForce: 10
+  enemydamage: 0
 --- !u!61 &700671383
 BoxCollider2D:
   m_ObjectHideFlags: 0
