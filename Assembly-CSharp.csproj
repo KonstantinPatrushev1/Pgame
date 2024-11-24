@@ -53,6 +53,8 @@
     <Compile Include="Assets\movement.cs" />
     <Compile Include="Assets\PlayerInfo.cs" />
     <Compile Include="Assets\SwordSpawner.cs" />
+    <Compile Include="Assets\Resources\interface\ParametrsHP.cs" />
+    <Compile Include="Assets\Resources\interface\ParametrsStamina.cs" />
     <None Include="Assets\Cainos\Pixel Art Top Down - Basic\Changelog.txt" />
     <None Include="Assets\weapons.txt" />
     <None Include="Assets\Cainos\Pixel Art Top Down - Basic\Shader\SH Sprite Shadow.shader" />

@@ -27,6 +27,7 @@ public class SwordSpawner : MonoBehaviour
 
     private float temp = -1;
     public WeaponManager weaponManager;
+    public PlayerInfo playerInfo;
 
     void Start()
     {
@@ -86,6 +87,7 @@ public class SwordSpawner : MonoBehaviour
             // Активируем вращение
             isRotating = true;
             rotationTimer = 0f; // Сбрасываем таймер
+            playerInfo.SetStamina(10);
         }
 
         // Выполняем вращение, если активен флаг
