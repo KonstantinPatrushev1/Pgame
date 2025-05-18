@@ -7,15 +7,22 @@ TagManager:
   - Enemy
   - Slime
   - Sword
+  - Chest
+  - InventorySlot
+  - ChestSlot
+  - Bow
+  - ChestZone
+  - Wall
+  - Pickaxe
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Item
   - Water
   - UI
-  - 
-  - 
+  - Wall
+  - Walls
   - 
   - 
   - 
@@ -52,4 +59,10 @@ TagManager:
     locked: 0
   - name: Layer 3
     uniqueID: 4189426099
+    locked: 0
+  - name: Darkness
+    uniqueID: 3006229175
+    locked: 0
+  - name: LightMask
+    uniqueID: 4057161183
     locked: 0

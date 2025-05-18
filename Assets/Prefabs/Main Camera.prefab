@@ -1,0 +1,262 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &535243619750333466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 535243619750333670}
+  - component: {fileID: 535243619750333465}
+  - component: {fileID: 535243619750333467}
+  - component: {fileID: 535243619750333671}
+  - component: {fileID: 535243619750333669}
+  - component: {fileID: 535243619750333668}
+  - component: {fileID: 535243619750333666}
+  - component: {fileID: 535243619750333667}
+  - component: {fileID: 535243619750333664}
+  - component: {fileID: 535243619750333665}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &535243619750333670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &535243619750333465
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.3571111, g: 0.49339178, b: 0.7075472, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 5.4086514
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 0
+  m_HDR: 1
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 0
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!81 &535243619750333467
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+--- !u!114 &535243619750333671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 308554bc4133d5042801dd6747466215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  offset: {x: 0, y: 0, z: 0}
+  smoothSpeed: 0.07
+  pixelsPerUnit: 100
+--- !u!114 &535243619750333669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a86246a6b68684d9eb16df323747f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - id: 0
+    name: Empty
+    img: {fileID: 21300000, guid: e9725353e3629f046916cf6fcc7048ee, type: 3}
+    istool: 0
+  - id: 1
+    name: Copper
+    img: {fileID: -2126200012, guid: f282ca80c2ba11c41b71183e1089ce1d, type: 3}
+    istool: 0
+  - id: 2
+    name: Gold
+    img: {fileID: -751167355, guid: f282ca80c2ba11c41b71183e1089ce1d, type: 3}
+    istool: 0
+  - id: 3
+    name: iron_sword
+    img: {fileID: 21300000, guid: bb82ddbc1a3d5464da369acfde13042e, type: 3}
+    istool: 1
+  - id: 4
+    name: palka
+    img: {fileID: 21300000, guid: 0fde84612e2af72439613c78eacc0f21, type: 3}
+    istool: 1
+  - id: 5
+    name: wood_sword
+    img: {fileID: 21300000, guid: 6ec940d05e934f443a3a909e1ff3c574, type: 3}
+    istool: 1
+  - id: 6
+    name: bow
+    img: {fileID: 21300000, guid: 950817261deb55f49831b7f2941c8174, type: 3}
+    istool: 1
+--- !u!114 &535243619750333668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86b0749da2a67334f95c403bce2dbeb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectionFrame: {fileID: 0}
+  selectionFrameTransform: {fileID: 0}
+  hotbarPanel: {fileID: 0}
+  hotbarSize: 10
+  cursorManager: {fileID: 535243619750333666}
+  droppedItemPrefab: {fileID: 2306403530479201846, guid: a3c4ade358e806143800b0d6d1c52bd1,
+    type: 3}
+  data: {fileID: 535243619750333669}
+  items: []
+  gameObjShow: {fileID: 8654736678792872068, guid: b3e96fd73e0275e498e82baf03bbccec,
+    type: 3}
+  InventoryMainObject: {fileID: 0}
+  maxCount: 40
+  cam: {fileID: 535243619750333465}
+  es: {fileID: 0}
+  currentID: -1
+  currentItem:
+    id: 0
+    itemGameObj: {fileID: 0}
+    istool: 0
+    count: 0
+  movingObject: {fileID: 0}
+  offset: {x: 0, y: 0, z: 0}
+  background: {fileID: 0}
+  IsInventoryOpen: 0
+  panelmover: {fileID: 0}
+  mapController: {fileID: 0}
+  lastSelectedHotbarSlot: 0
+  chestPanel: {fileID: 0}
+  inventoryCopySize: 20
+  PausePanel: {fileID: 0}
+  StatuePanel: {fileID: 0}
+  SavePanel: {fileID: 0}
+  TeleportPanel: {fileID: 0}
+  dropEndPosition: {x: 0, y: 0, z: 0}
+  animator: {fileID: 0}
+--- !u!114 &535243619750333666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16ca1932d9914c948905c66bd33b9e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &535243619750333667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797610ad380950445b56507537b7e7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panel: {fileID: 0}
+  panelMap: {fileID: 0}
+  panelInventory: {fileID: 0}
+  ispanelopen: 0
+  cursorManager: {fileID: 535243619750333666}
+  StatuePanel: {fileID: 0}
+  SavePanel: {fileID: 0}
+  TeleportPanel: {fileID: 0}
+--- !u!114 &535243619750333664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ecbed5b27e375640bae41290092f953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &535243619750333665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535243619750333466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 250502b8a88dbb849a6381333f6e7a0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allChests:
+  - {fileID: 0}
+  - {fileID: 0}
+  inventory: {fileID: 535243619750333668}
+  player: {fileID: 0}
+  playerInfo: {fileID: 0}
+  currentSlotFileName: Slot1.save
+  skinColorChanger: {fileID: 0}

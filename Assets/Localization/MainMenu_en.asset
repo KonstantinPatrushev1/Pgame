@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MainMenu_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 1459c31cb56ab6049badcaba33978b2c, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 106332323840
+    m_Localized: PLAY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 116247658496
+    m_Localized: SAVES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119099785216
+    m_Localized: SETTINGS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 121851248640
+    m_Localized: EXIT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544934887424
+    m_Localized: RESOLUTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 636324577280
+    m_Localized: QUALITY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 711838826496
+    m_Localized: LANGUAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 787323715584
+    m_Localized: VOLUME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 921403031552
+    m_Localized: FULLSCREEN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36468901183488
+    m_Localized: MENU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 353440981483520
+    m_Localized: SAVE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11535331575103488
+    m_Localized: LOW
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

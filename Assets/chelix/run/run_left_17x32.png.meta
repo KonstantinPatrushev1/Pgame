@@ -119,8 +119,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03f6691bec8e384499aba70e0d50af27
-      internalID: 130490211
+      spriteID: ae1d5a2c560427d42a6482b3cffb7636
+      internalID: -1397220391
       vertices: []
       indices: 
       edges: []
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0b56a3fc66f44214b8ac117f2b85fc5d
-      internalID: -1002370013
+      spriteID: ea08c46a714759b43afd31e9b39dabc4
+      internalID: 582217005
       vertices: []
       indices: 
       edges: []
@@ -161,8 +161,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f2ca2503127d054a877a3ed228c681a
-      internalID: 1787406027
+      spriteID: 234c68ea47ded9b40b4d71b09335067c
+      internalID: 318058855
       vertices: []
       indices: 
       edges: []
@@ -182,8 +182,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2db04ec1cae2f834d99979032000ee1f
-      internalID: 831750453
+      spriteID: 20e84460cecc40145b0f16ae9546ba1a
+      internalID: -222485354
       vertices: []
       indices: 
       edges: []
@@ -203,8 +203,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 38961c908e27ae44c8d0030b23e7860e
-      internalID: 1317402097
+      spriteID: 589ad7f61067ab949a853d494c948e6b
+      internalID: -1064506223
       vertices: []
       indices: 
       edges: []
@@ -224,8 +224,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f50b29f4571b78478dd817318cba22d
-      internalID: 1807099947
+      spriteID: facb0e6ffccdf864b8a1692ef1a5207c
+      internalID: -1138208172
       vertices: []
       indices: 
       edges: []
@@ -241,12 +241,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      run_left_17x32_0: 130490211
-      run_left_17x32_1: -1002370013
-      run_left_17x32_2: 1787406027
-      run_left_17x32_3: 831750453
-      run_left_17x32_4: 1317402097
-      run_left_17x32_5: 1807099947
+      run_left_17x32_0: -1397220391
+      run_left_17x32_1: 582217005
+      run_left_17x32_2: 318058855
+      run_left_17x32_3: -222485354
+      run_left_17x32_4: -1064506223
+      run_left_17x32_5: -1138208172
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

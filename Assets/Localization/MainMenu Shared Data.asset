@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MainMenu Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: MainMenu
+  m_TableCollectionNameGuidString: 1459c31cb56ab6049badcaba33978b2c
+  m_Entries:
+  - m_Id: 106332323840
+    m_Key: play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 116247658496
+    m_Key: saves
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119099785216
+    m_Key: settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 121851248640
+    m_Key: exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544934887424
+    m_Key: resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 636324577280
+    m_Key: quality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 711838826496
+    m_Key: language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 787323715584
+    m_Key: volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 921403031552
+    m_Key: fullscreen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36468901183488
+    m_Key: menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 353440981483520
+    m_Key: save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11535331575103488
+    m_Key: low
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 4506181473270759448
+  references:
+    version: 2
+    RefIds:
+    - rid: 4506181473270759448
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1736337957048
