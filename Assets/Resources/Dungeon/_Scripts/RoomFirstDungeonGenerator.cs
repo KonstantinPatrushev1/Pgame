@@ -16,6 +16,8 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
     private bool randomWalkRooms = false;
     [SerializeField] 
     private TorchSpawner torchSpawner;
+    [SerializeField] 
+    private RoomObjectSpawner roomObjectSpawner;
     
     
     // Добавляем список центров комнат как поле класса
@@ -97,6 +99,7 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
 
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
         torchSpawner.SpawnTorchesInRooms(roomsList);
+        roomObjectSpawner.SpawnObjectsInRooms(roomsList, corridors);
     }
 
     private HashSet<Vector2Int> CreateRoomsRandomly(List<BoundsInt> roomsList)

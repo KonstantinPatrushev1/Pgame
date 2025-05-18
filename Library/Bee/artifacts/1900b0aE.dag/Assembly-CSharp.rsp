@@ -403,6 +403,7 @@
 "Assets/Resources/Dungeon/_Scripts/PlayerTeleporter.cs"
 "Assets/Resources/Dungeon/_Scripts/ProceduralGenerationAlgorithms.cs"
 "Assets/Resources/Dungeon/_Scripts/RoomFirstDungeonGenerator.cs"
+"Assets/Resources/Dungeon/_Scripts/RoomObjectSpawner.cs"
 "Assets/Resources/Dungeon/_Scripts/SimpleRandomWalkDungeonGenerator.cs"
 "Assets/Resources/Dungeon/_Scripts/TilemapVisualizer.cs"
 "Assets/Resources/Dungeon/_Scripts/TorchFlicker.cs"

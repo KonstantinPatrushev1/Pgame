@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Stone : MonoBehaviour
 {
@@ -19,10 +21,11 @@ public class Stone : MonoBehaviour
     private bool isShaking = false;
     private float shakeTimer = 0f;
     
-    public DataBase data;
-
+    private DataBase data;
+    
     void Start()
     {
+        data = FindObjectOfType<DataBase>();
         currentHP = maxHP;
         lastDamageTime = -damageCooldown;
         originalPosition = transform.position;
@@ -100,7 +103,7 @@ public class Stone : MonoBehaviour
                 dropPosition.y -= 0.2f; // Можно регулировать это значение
             
                 itemScript.itemID = dropItemID;
-                itemScript.count = dropCount;
+                itemScript.count = Random.Range(dropCount-2,dropCount+2);
                 itemScript.istool = isTool;
                 itemScript.dropEndPosition = dropPosition; // Используем скорректированную позицию
                 itemScript.startSwaying = true;
@@ -108,7 +111,7 @@ public class Stone : MonoBehaviour
             }
         
             // Масштабируем
-            droppedItem.transform.localScale *= 0.5f;
+            droppedItem.transform.localScale *= 0.7f;
         }
     }
 

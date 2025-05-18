@@ -53,6 +53,7 @@
     <Compile Include="Assets\Resources\Dungeon\_Scripts\TilemapVisualizer.cs" />
     <Compile Include="Assets\Resources\Dungeon\_Scripts\CorridorFirstDangeounGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerCollision.cs" />
+    <Compile Include="Assets\Resources\Dungeon\_Scripts\RoomObjectSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Menu\GameToMenu.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Assets\Resources\Dungeon\_Scripts\ProceduralGenerationAlgorithms.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\Interface\PanelMover.cs" />
+    <Compile Include="Assets\Scripts\World\Stone.cs" />
     <Compile Include="Assets\Scripts\Interface\InventoryButton.cs" />
     <Compile Include="Assets\Resources\Dungeon\_Scripts\WallTypesHelper.cs" />
     <Compile Include="Assets\Cainos\Pixel Art Top Down - Basic\Script\SpriteColorAnimation.cs" />
@@ -138,7 +140,6 @@
     <Compile Include="Assets\Resources\Dungeon\_Scripts\TorchFlicker.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Resources\Dungeon\_Scripts\RoomFirstDungeonGenerator.cs" />
-    <Compile Include="Assets\Scripts\World\Stone.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

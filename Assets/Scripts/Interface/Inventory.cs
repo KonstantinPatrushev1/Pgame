@@ -346,7 +346,7 @@ public class Inventory : MonoBehaviour
             }
 
             // Уменьшаем размер объекта для отображения на земле
-            droppedItem.transform.localScale *= 0.5f;
+            droppedItem.transform.localScale *= 0.7f;
 
             // НЕ сбрасывайте позицию объекта в анимации
             StartCoroutine(AnimateItemDrop(droppedItem.transform, dropStartPosition, dropEndPosition));
