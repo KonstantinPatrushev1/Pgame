@@ -65,14 +65,17 @@ public class RoomObjectSpawner : MonoBehaviour
     private List<Vector2Int> GetAllValidPositionsInRoom(BoundsInt room, HashSet<Vector2Int> corridorPositions)
     {
         List<Vector2Int> validPositions = new List<Vector2Int>();
+    
+        // Добавляем дополнительный отступ от стен
+        int padding = 1; // Можно увеличить, если нужно больше отступов
 
-        for (int x = room.x + 1; x < room.x + room.size.x - 1; x++)
+        for (int x = room.x + padding; x < room.x + room.size.x - padding; x++)
         {
-            for (int y = room.y + 1; y < room.y + room.size.y - 1; y++)
+            for (int y = room.y + padding; y < room.y + room.size.y - padding; y++)
             {
                 Vector3Int tilePos = new Vector3Int(x, y, 0);
                 TileBase tile = floorTilemap.GetTile(tilePos);
-                
+            
                 if (tile != null && tile == tilemapVisualizer.floorTile)
                 {
                     validPositions.Add(new Vector2Int(x, y));
@@ -148,14 +151,23 @@ public class RoomObjectSpawner : MonoBehaviour
             for (int y = -1; y <= 1; y++)
             {
                 if (x == 0 && y == 0) continue;
-                
+            
                 Vector2Int checkPos = centerPosition + new Vector2Int(x, y);
-                if (!occupiedPositions.Contains(checkPos))
+                Vector3Int tilePos = (Vector3Int)checkPos;
+            
+                // Проверяем два условия:
+                // 1. Что позиция не занята другими объектами
+                // 2. Что на этой позиции есть floorTile
+                if (!occupiedPositions.Contains(checkPos)) 
                 {
-                    freeTilesFound++;
-                    if (freeTilesFound >= requiredFreeTiles - 1)
+                    TileBase tile = floorTilemap.GetTile(tilePos);
+                    if (tile != null && tile == tilemapVisualizer.floorTile)
                     {
-                        return true;
+                        freeTilesFound++;
+                        if (freeTilesFound >= requiredFreeTiles - 1)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -170,7 +182,7 @@ public class RoomObjectSpawner : MonoBehaviour
         spawnedObjects.Add(obj);
     }
 
-    private void ClearExistingObjects()
+    public void ClearExistingObjects()
     {
         foreach (var obj in spawnedObjects)
         {

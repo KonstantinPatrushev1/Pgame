@@ -47,6 +47,8 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         // Очищаем перед генерацией
         tilemapVisualizer.Clear();
         roomCenters.Clear();
+        roomObjectSpawner.ClearExistingObjects();
+        torchSpawner.ClearExistingTorches();
     
         CreateRooms();
         IsGenerationComplete = true;

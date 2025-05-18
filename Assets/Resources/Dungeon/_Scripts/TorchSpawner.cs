@@ -69,7 +69,7 @@ public class TorchSpawner : MonoBehaviour
         spawnedTorches.Add(torch); // Запоминаем созданный факел
     }
 
-    private void ClearExistingTorches()
+    public void ClearExistingTorches()
     {
         // Уничтожаем все запомненные факелы
         foreach (var torch in spawnedTorches)
