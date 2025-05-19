@@ -40,6 +40,15 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         // Сбрасываем флаг генерации
         IsGenerationComplete = true;
     }
+    
+    protected override void ClearObjects()
+    {
+        IsGenerationComplete = false;
+        
+        roomObjectSpawner.ClearExistingObjects();
+        torchSpawner.ClearExistingTorches();
+
+    }
     protected override void RunProceduralGeneration()
     {
         IsGenerationComplete = false;
@@ -100,7 +109,6 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         tilemapVisualizer.ReplaceTiles(corridors, tilemapVisualizer.corridorTile);
 
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
-        torchSpawner.SpawnTorchesInRooms(roomsList);
         roomObjectSpawner.SpawnObjectsInRooms(roomsList, corridors);
     }
 
@@ -193,6 +201,36 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator
         }
 
         return closest;
+    }
+    
+    public HashSet<Vector2Int> GetCorridorTilesInRooms()
+    {
+        HashSet<Vector2Int> corridorTilesInRooms = new HashSet<Vector2Int>();
+    
+        // Получаем список всех комнат (BoundsInt)
+        var roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(
+            new BoundsInt((Vector3Int)startPosition, new Vector3Int(dungeonWidth, dungeonHeight, 0)), 
+            minRoomWidth,
+            minRoomHeight
+        );
+
+        // Получаем все коридорные тайлы
+        var corridors = ConnectRooms(new List<Vector2Int>(roomCenters));
+
+        // Проверяем каждый коридорный тайл, находится ли он внутри какой-либо комнаты
+        foreach (var corridorPos in corridors)
+        {
+            foreach (var room in roomsList)
+            {
+                if (room.Contains((Vector3Int)corridorPos))
+                {
+                    corridorTilesInRooms.Add(corridorPos);
+                    break; // Переходим к следующему коридорному тайлу
+                }
+            }
+        }
+
+        return corridorTilesInRooms;
     }
 
     private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomsList)

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -3047281770360743959}
   - component: {fileID: -6399857878708008730}
   - component: {fileID: -4593284110157164778}
+  - component: {fileID: 1533054500565398905}
   m_Layer: 3
   m_Name: DropItem
   m_TagString: Untagged
@@ -102,7 +103,16 @@ MonoBehaviour:
   count: 0
   istool: 0
   startSwaying: 0
+  dropDirection: {x: 0, y: 0, z: 0}
   inventory: {fileID: 0}
+  defaultHeightRange: 0.5
+  verticalThrowExtraRange: 1.5
+  attractSpeed: 5
+  attractStartDistance: 1
+  shadowPrefab: {fileID: 943108458976941216, guid: 56f60d8de9731024ebc76d4567a99a4c,
+    type: 3}
+  shadowOffset: 0.7
+  shadowScale: 0.8
 --- !u!61 &-4593284110157164778
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -113,7 +123,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -129,3 +139,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.0001, y: 0.0001}
   m_EdgeRadius: 0
+--- !u!114 &1533054500565398905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2306403530479201846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7657ae7556df149bf6ae6b98a9aa2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingMultiplier: 100

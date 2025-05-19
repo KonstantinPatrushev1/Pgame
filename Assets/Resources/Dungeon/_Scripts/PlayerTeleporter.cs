@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class PlayerTeleporter : MonoBehaviour
 {
@@ -87,17 +89,31 @@ public class PlayerTeleporter : MonoBehaviour
     private void TeleportPlayerToRandomRoom()
     {
         if (dungeonGenerator == null) return;
-        
-        Vector2Int? randomCenter = dungeonGenerator.GetRandomRoomCenter();
-        
-        if (randomCenter.HasValue && player != null)
+
+        // Получаем все коридорные тайлы внутри комнат
+        HashSet<Vector2Int> corridorTilesInRooms = dungeonGenerator.GetCorridorTilesInRooms();
+    
+        if (corridorTilesInRooms.Count == 0)
         {
-            Vector3 targetPosition = new Vector3(
-                randomCenter.Value.x, 
-                randomCenter.Value.y, 
-                player.position.z
-            );
-            player.position = targetPosition;
+            Debug.LogWarning("No corridor tiles in rooms found! Using random room center instead.");
+            // Fallback - используем центр комнаты, если нет коридорных тайлов
+            Vector2Int? randomCenter = dungeonGenerator.GetRandomRoomCenter();
+            if (randomCenter.HasValue && player != null)
+            {
+                player.position = new Vector3(randomCenter.Value.x, randomCenter.Value.y, player.position.z);
+            }
+            return;
+        }
+
+        // Выбираем случайный коридорный тайл из найденных
+        Vector2Int[] corridorArray = new Vector2Int[corridorTilesInRooms.Count];
+        corridorTilesInRooms.CopyTo(corridorArray);
+        Vector2Int randomCorridorPosition = corridorArray[Random.Range(0, corridorArray.Length)];
+
+        // Телепортируем игрока
+        if (player != null)
+        {
+            player.position = new Vector3(randomCorridorPosition.x, randomCorridorPosition.y, player.position.z);
         }
     }
 

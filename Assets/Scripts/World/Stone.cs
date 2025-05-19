@@ -86,30 +86,36 @@ public class Stone : MonoBehaviour
         {
             // Создаем предмет
             GameObject droppedItem = Instantiate(dropItemPrefab, transform.position, Quaternion.identity);
-            
-            droppedItem.GetComponent<SpriteRenderer>().sortingOrder = -32766;
         
+            droppedItem.GetComponent<SpriteRenderer>().sortingOrder = -32766;
+    
             // Получаем компоненты
             DroppedItem itemScript = droppedItem.GetComponent<DroppedItem>();
             SpriteRenderer sr = droppedItem.GetComponent<SpriteRenderer>();
-        
+    
             // Настраиваем спрайт
             sr.sprite = data.items[dropItemID].img;
-        
+    
             if (itemScript != null)
             {
-                // Корректируем позицию дропа - немного ниже камня
-                Vector3 dropPosition = transform.position;
-                dropPosition.y -= 0.2f; // Можно регулировать это значение
+                // Генерируем случайное направление
+                Vector2 randomDirection = Random.insideUnitCircle.normalized;
+                // Слегка увеличиваем вероятность выброса вверх
+                randomDirection.y = Mathf.Abs(randomDirection.y) * 0.7f;
             
+                // Инициализируем позицию
+                itemScript.Initialize(transform.position, randomDirection.y, true);
+            
+                // Настраиваем предмет
                 itemScript.itemID = dropItemID;
-                itemScript.count = Random.Range(dropCount-2,dropCount+2);
+                itemScript.count = Random.Range(Mathf.Max(1, dropCount-2), dropCount+2);
                 itemScript.istool = isTool;
-                itemScript.dropEndPosition = dropPosition; // Используем скорректированную позицию
-                itemScript.startSwaying = true;
-                itemScript.MarkAsLanded();
+            
+                // Применяем силу броска
+                float throwForce = Random.Range(3f, 6f); // Сила броска
+                itemScript.ApplyThrowForce(randomDirection, throwForce);
             }
-        
+    
             // Масштабируем
             droppedItem.transform.localScale *= 0.7f;
         }

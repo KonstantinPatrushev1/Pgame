@@ -312,46 +312,47 @@ public class Inventory : MonoBehaviour
     {
         if (currentItem != null && currentItem.id != 0)
         {
-            Vector3 dropStartPosition = transform.position; // Получаем позицию мыши
-            dropStartPosition.z = 0; // Устанавливаем Z в 0, чтобы не было ошибки
-            dropStartPosition.y -= 0.8f;
+            float horizontal = animator.GetFloat("Horizontal");
+            float vertical = animator.GetFloat("Vertical");
+            Vector3 dropStartPosition = transform.position;
+            dropStartPosition.z = 0;
+            dropStartPosition.y += 0.1f;
 
-            Vector3 dropDirection = GetDropDirection(); // Получаем направление броска
-            float dropDistance = 1f; // Расстояние броска
-
-            // Проверяем наличие коллайдера перед персонажем
-            RaycastHit2D hit = Physics2D.Raycast(dropStartPosition, dropDirection, dropDistance, LayerMask.GetMask("Wall"));
-
-            // Если перед персонажем есть препятствие, предмет падает перед препятствием
-            if (hit.collider != null && !hit.collider.CompareTag("Player"))
-            {
-                dropEndPosition = hit.point;
-            }
-            else
-            {
-                dropEndPosition = dropStartPosition + dropDirection * dropDistance;
-            }
-
-            // Создаем новый экземпляр выброшенного предмета
+            Vector3 dropDirection = GetDropDirection();
+        
             GameObject droppedItem = Instantiate(droppedItemPrefab, dropStartPosition, Quaternion.identity);
             droppedItem.GetComponent<SpriteRenderer>().sprite = data.items[currentItem.id].img;
-
-            DroppedItem droppedItemScript = droppedItem.GetComponent<DroppedItem>();
-            if (droppedItemScript != null)
-            {
-                droppedItemScript.itemID = currentItem.id;
-                droppedItemScript.count = currentItem.count;
-                droppedItemScript.istool = currentItem.istool;
-                droppedItemScript.dropEndPosition = dropEndPosition;
-            }
-
-            // Уменьшаем размер объекта для отображения на земле
             droppedItem.transform.localScale *= 0.7f;
 
-            // НЕ сбрасывайте позицию объекта в анимации
-            StartCoroutine(AnimateItemDrop(droppedItem.transform, dropStartPosition, dropEndPosition));
+            // Добавляем физический материал для трения
+            PhysicsMaterial2D material = new PhysicsMaterial2D();
+            material.friction = 0.4f;
+            material.bounciness = 0.1f;
+        
+            Collider2D collider = droppedItem.GetComponent<Collider2D>();
+            if (collider != null)
+            {
+                collider.sharedMaterial = material;
+            }
 
-            // Сбрасываем текущий предмет
+             DroppedItem droppedItemScript = droppedItem.GetComponent<DroppedItem>();
+        if (droppedItemScript != null)
+        {
+            droppedItemScript.itemID = currentItem.id;
+            droppedItemScript.count = currentItem.count;
+            droppedItemScript.istool = currentItem.istool;
+            droppedItemScript.Initialize(dropStartPosition, vertical, false);
+            
+            // Генерируем направление броска
+            Vector3 dropDirectionn = new Vector3(
+                horizontal, 
+                Mathf.Clamp(vertical, -0.5f, 0.5f), 
+                0
+            ).normalized;
+            
+            droppedItemScript.ApplyThrowForce(dropDirectionn, 8f);
+        }
+
             currentID = -1;
             currentItem = null;
             movingObject.gameObject.SetActive(false);
@@ -365,75 +366,22 @@ public class Inventory : MonoBehaviour
     public Animator animator;
     private Vector3 GetDropDirection()
     {
-
-        // Предполагаем, что в Animator есть параметры "Horizontal" и "Vertical"
         float horizontal = animator.GetFloat("Horizontal");
         float vertical = animator.GetFloat("Vertical");
 
-        // Формируем вектор направления
-        Vector3 dropDirection = new Vector3(horizontal, vertical, 0).normalized;
+        // Усиливаем горизонтальную составляющую
+        Vector3 dropDirection = new Vector3(
+            Mathf.Clamp(horizontal * 2f, -1f, 1f),
+            Mathf.Clamp(vertical * 0.5f, -1f, 1f),
+            0
+        ).normalized;
 
-        // Если вектор нулевой (персонаж стоит), выбрасываем предмет вправо как дефолт
         if (dropDirection == Vector3.zero)
         {
-            dropDirection = new Vector3(1, 0, 0);
+            dropDirection = new Vector3(1, 0, 0); // Дефолтное направление - вправо
         }
 
         return dropDirection;
-    }
-
-
-    private IEnumerator AnimateItemDrop(Transform itemTransform, Vector3 start, Vector3 end)
-    {
-        float duration = 1f; // Общая длительность анимации
-        float bounceHeight = 1.0f; // Высота первого отскока
-        int bounces = 3; // Количество отскоков
-        float gravity = 2.0f; // Ускорение "гравитации"
-
-        Vector3 currentPosition = start; // Используем начальную позицию
-        float time = 0f;
-
-        // Выполняем несколько отскоков
-        for (int i = 0; i < bounces; i++)
-        {
-            float bounceDuration = duration / (bounces * 2); // Длительность каждого отскока
-            Vector3 bounceApex = new Vector3(end.x, end.y + bounceHeight, end.z); // Пик отскока
-
-            // Подъем до пика
-            while (time < bounceDuration)
-            {
-                currentPosition = Vector3.Lerp(start, bounceApex, time / bounceDuration);
-                itemTransform.position = currentPosition;
-                time += Time.deltaTime;
-                yield return null;
-            }
-
-            time = 0f; // Сбрасываем время для падения
-            start = bounceApex; // Новый старт - это пик отскока
-
-            // Падение
-            while (time < bounceDuration)
-            {
-                currentPosition = Vector3.Lerp(start, end, time / bounceDuration);
-                itemTransform.position = currentPosition;
-                time += Time.deltaTime;
-                yield return null;
-            }
-
-            time = 0f; // Сбрасываем время
-            start = end; // Новый старт - это точка приземления
-            bounceHeight /= gravity; // Каждый отскок становится ниже
-        }
-
-        itemTransform.position = end; // Финальная позиция
-
-        // Вызываем MarkAsLanded() сразу после того, как предмет упал
-        DroppedItem droppedItemScript = itemTransform.GetComponent<DroppedItem>();
-        if (droppedItemScript != null)
-        {
-            droppedItemScript.MarkAsLanded();  // Помечаем, что предмет упал
-            droppedItemScript.startSwaying = true;  // Запускаем колебания
-        }
     }
 
 

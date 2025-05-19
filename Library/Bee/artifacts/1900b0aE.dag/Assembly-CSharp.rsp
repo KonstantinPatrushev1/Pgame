@@ -432,6 +432,7 @@
 "Assets/Scripts/Items/Arrow.cs"
 "Assets/Scripts/Items/Chest.cs"
 "Assets/Scripts/Items/ChestZones.cs"
+"Assets/Scripts/Items/ShadowManager.cs"
 "Assets/Scripts/Items/StatuePanel.cs"
 "Assets/Scripts/Items/StatueZones.cs"
 "Assets/Scripts/Items/ZoneTrigger.cs"

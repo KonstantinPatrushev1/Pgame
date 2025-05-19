@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DroppedItem : MonoBehaviour
@@ -6,24 +8,84 @@ public class DroppedItem : MonoBehaviour
     public int count;
     public bool istool;
 
-    private float amplitude = 0.1f; // Высота колебания
-    private float frequency = 2f; // Частота колебания
+    private float amplitude = 0.002f;
+    private float frequency = 2f;
 
     public bool startSwaying = false;
     private Vector3 startPosition;
-    public Vector3 dropEndPosition;
+    public Vector3 dropDirection;
 
     private Transform visualObject;
+    public Inventory inventory;
+    private bool canBePickedUp = false;
+    private bool hasLanded = false;
+    private float pickupTimer = 0f;
+    private bool isFirstDrop = true;
 
-    public Inventory inventory;  // Ссылка на инвентарь
+    private Rigidbody2D rb;
+    private bool physicsApplied = false;
+    private float minHeight;
+    private float maxHeight;
+    public float defaultHeightRange = 0.5f;
+    public float verticalThrowExtraRange = 1.5f;
+    private float heightRange = 1f;
+    private float drag = 4f;
+    private float angularDrag = 2f;
+    private bool isStopping = false;
+    
+    private Collider2D itemCollider;
+    private Collider2D playerCollider;
+    private Collider2D attractTargetCollider;
+    
+    // Новые переменные для притягивания
+    private bool isAttracting = false;
+    private Transform attractTarget;
+    public float attractSpeed = 5f;
+    public float attractStartDistance = 1f;
+    
+    [Header("Shadow Settings")]
+    public GameObject shadowPrefab;
+    public float shadowScale = 0.8f;
+    public float shadowVerticalOffset = 0.2f;
+    private GameObject dynamicShadow;
+    private bool shadowIsFixed = false;
+    private Vector3 fixedShadowPosition;
 
-    private bool canBePickedUp = false; // Флаг для проверки, можно ли подобрать предмет
-    private bool hasLanded = false; // Флаг, чтобы знать, что предмет упал
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        itemCollider = GetComponent<Collider2D>();
+        
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody2D>();
+            rb.drag = drag;
+            rb.angularDrag = angularDrag;
+        }
+        rb.gravityScale = 0;
+        rb.freezeRotation = true;
+        
+        if (shadowPrefab != null)
+        {
+            dynamicShadow = Instantiate(shadowPrefab, transform.position, Quaternion.identity);
+            dynamicShadow.transform.localScale = Vector3.one * shadowScale;
+        }
+    }
 
-    private float timeToBePickedUp = 0f; // Задержка перед тем, как предмет можно будет подобрать (после падения)
-    private float pickupTimer = 0f; // Таймер для отсчета времени
-
-    private bool isFirstDrop = true;  // Флаг, чтобы отслеживать первый бросок
+    public void Initialize(Vector3 startPosition, float throwDirectionY, bool isDropObject)
+    {
+        float verticalFactor = Mathf.Abs(throwDirectionY);
+        if (isDropObject)
+        {
+            heightRange = 0.5f;
+        }
+        else
+        {
+            heightRange = defaultHeightRange + (verticalThrowExtraRange * verticalFactor);
+        }
+        minHeight = startPosition.y - heightRange;
+        maxHeight = startPosition.y + heightRange;
+    }
 
     void OnEnable()
     {
@@ -35,97 +97,245 @@ public class DroppedItem : MonoBehaviour
         {
             visualObject = this.transform;
         }
+
+        // Находим коллайдеры Player и AttractTarget
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject attractTargetObj = GameObject.FindGameObjectWithTag("AttractTarget");
+        
+        if (player != null) playerCollider = player.GetComponent<Collider2D>();
+        if (attractTargetObj != null) attractTargetCollider = attractTargetObj.GetComponent<Collider2D>();
+
+        // Игнорируем коллизии с Player и AttractTarget до приземления
+        if (itemCollider != null)
+        {
+            if (playerCollider != null) Physics2D.IgnoreCollision(playerCollider, itemCollider, true);
+            if (attractTargetCollider != null) Physics2D.IgnoreCollision(attractTargetCollider, itemCollider, true);
+        }
+
+        // Игнорируем другие коллизии как раньше
+        string[] tagsToIgnore = { "Sword", "Arrow", "Enemy" };
+        foreach (string tag in tagsToIgnore)
+        {
+            GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
+            foreach (GameObject obj in objects)
+            {
+                Collider2D objCollider = obj.GetComponent<Collider2D>();
+                if (objCollider != null && itemCollider != null)
+                {
+                    Physics2D.IgnoreCollision(objCollider, itemCollider, true);
+                }
+            }
+        }
+
         startPosition = transform.position;
-
-        // Сразу начинаем отсчитывать время до того, как предмет можно будет подобрать
-        pickupTimer = 0f; // Сбрасываем таймер
-        hasLanded = false; // Сбрасываем флаг приземления
-        canBePickedUp = false; // Предмет не доступен для подбора сразу
-
-        // Устанавливаем размеры коллайдера по размеру текстуры
+        pickupTimer = 0f;
+        hasLanded = false;
+        canBePickedUp = false;
+        isAttracting = false;
         AdjustColliderToSprite();
+    }
+
+    public void ApplyThrowForce(Vector3 direction, float force)
+    {
+        if (rb != null && !physicsApplied)
+        {
+            rb.gravityScale = 1;
+            rb.drag = drag;
+        
+            Vector2 forceDirection = new Vector2(
+                direction.x,
+                Mathf.Clamp(direction.y, -0.5f, 0.5f)
+            ).normalized;
+        
+            rb.AddForce(forceDirection * force, ForceMode2D.Impulse);
+            physicsApplied = true;
+            isStopping = false;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (physicsApplied && !hasLanded)
+        {
+            float clampedY = Mathf.Clamp(rb.position.y, minHeight, maxHeight);
+            if (!Mathf.Approximately(clampedY, rb.position.y))
+            {
+                isStopping = true;
+            }
+            
+            if ((rb.velocity.magnitude < 0.3f || isStopping) && !hasLanded)
+            {
+                StopPhysics();
+            }
+        }
+        
+        // Логика притягивания к AttractTarget
+        if (isAttracting && attractTarget != null)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, attractTarget.position, attractSpeed * Time.deltaTime);
+            
+            if (Vector2.Distance(transform.position, attractTarget.position) < 0.1f)
+            {
+                TryPickup();
+            }
+        }
     }
 
     void Update()
     {
-        // Проверка на анимацию колебания
+        if (dynamicShadow != null)
+        {
+            if (!shadowIsFixed)
+            {
+                // Обновляем позицию динамической тени
+                Vector3 shadowPos = transform.position;
+                shadowPos.y -= shadowVerticalOffset;
+                dynamicShadow.transform.position = shadowPos;
+            }
+            // Фиксированная тень остается на месте (не нужно обновлять)
+        }
+        
         if (startSwaying)
         {
-            float newY = dropEndPosition.y + Mathf.Sin(Time.time * frequency) * amplitude;
-            visualObject.position = new Vector3(dropEndPosition.x, newY, dropEndPosition.z);
+            float newY = transform.position.y + Mathf.Sin(Time.time * frequency) * amplitude;
+            visualObject.position = new Vector3(transform.position.x, newY, transform.position.z);
         }
 
-        // Когда предмет упал на землю, начинаем отсчитывать время для подбора
         if (hasLanded)
         {
-            if (isFirstDrop)
+            pickupTimer += Time.deltaTime;
+            if (isFirstDrop && pickupTimer >= 0.5f)
             {
-                pickupTimer += Time.deltaTime;
-                if (pickupTimer >= timeToBePickedUp)
-                {
-                    canBePickedUp = true;
-                    isFirstDrop = false; // После первого броска задержка больше не требуется
-                }
+                canBePickedUp = true;
+                isFirstDrop = false;
             }
-            else
+            else if (!isFirstDrop)
             {
-                // Если это не первый бросок, разрешаем подбирать сразу
                 canBePickedUp = true;
             }
         }
     }
+    
+    private void StopPhysics()
+    {
+        if (rb == null || hasLanded) return;
+
+        Vector3 finalPosition = new Vector3(
+            transform.position.x,
+            Mathf.Clamp(transform.position.y, minHeight, maxHeight),
+            0
+        );
+
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.gravityScale = 0;
+        rb.drag = 0;
+        rb.position = finalPosition;
+        
+        if (dynamicShadow != null)
+        {
+            // Фиксируем позицию тени
+            shadowIsFixed = true;
+            fixedShadowPosition = dynamicShadow.transform.position;
+        
+            // Регистрируем тень в менеджере
+            ShadowManager.Instance.RegisterFixedShadow(fixedShadowPosition, dynamicShadow);
+        }
+
+        hasLanded = true;
+        startSwaying = true;
+        physicsApplied = false;
+        isStopping = false;
+
+        transform.position = finalPosition;
+
+        // Включаем коллизии с Player и AttractTarget после приземления
+        if (itemCollider != null)
+        {
+            if (playerCollider != null) Physics2D.IgnoreCollision(playerCollider, itemCollider, false);
+            if (attractTargetCollider != null) Physics2D.IgnoreCollision(attractTargetCollider, itemCollider, false);
+            
+            itemCollider.isTrigger = true;
+        }
+
+        // Находим AttractTarget для возможного притягивания
+        GameObject attractTargetObj = GameObject.FindGameObjectWithTag("AttractTarget");
+        if (attractTargetObj != null)
+        {
+            attractTarget = attractTargetObj.transform;
+        }
+ 
+        canBePickedUp = true;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && canBePickedUp)
+        if (other.CompareTag("Player") && hasLanded && canBePickedUp && !isAttracting)
         {
-            if (istool)
+            // Удаляем тень перед притягиванием
+            if (dynamicShadow != null)
             {
-                count = 1;
+                ShadowManager.Instance.UnregisterShadow(dynamicShadow);
+                Destroy(dynamicShadow);
+                dynamicShadow = null;
             }
-            // Добавляем предмет в инвентарь
-            inventory.AddItemToInventory(this);
-
-            // Уничтожаем объект
-            Destroy(gameObject);
+        
+            if (attractTarget != null)
+            {
+                isAttracting = true;
+                startSwaying = false;
+            }
+        }
+        else if (other.CompareTag("AttractTarget") && hasLanded && canBePickedUp)
+        {
+            TryPickup();
         }
     }
 
-    // Метод для настройки коллайдера по размеру спрайта
+    private void TryPickup()
+    {
+        // Удаляем тень перед подбором
+        if (dynamicShadow != null)
+        {
+            ShadowManager.Instance.UnregisterShadow(dynamicShadow);
+            Destroy(dynamicShadow);
+        }
+
+        if (istool)
+        {
+            count = 1;
+        }
+        inventory.AddItemToInventory(this);
+        Destroy(gameObject);
+    }
+
     private void AdjustColliderToSprite()
     {
-        // Получаем компонент SpriteRenderer
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-
         if (spriteRenderer != null)
         {
-            // Получаем размер текстуры (спрайта)
             Vector2 spriteSize = spriteRenderer.size;
-
-            // Получаем BoxCollider2D
             BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-
             if (boxCollider != null)
             {
-                // Устанавливаем размер коллайдера по размеру спрайта
                 boxCollider.size = spriteSize;
             }
             else
             {
-                // Если коллайдера нет, создаем его
                 boxCollider = gameObject.AddComponent<BoxCollider2D>();
                 boxCollider.size = spriteSize;
             }
         }
-        
     }
     
 
-    // Метод, который будет вызываться после анимации падения, чтобы флаг "упал на землю"
-    public void MarkAsLanded()
+    
+    void OnDestroy()
     {
-        hasLanded = true;
-        pickupTimer = 0f; // Сброс таймера сразу после приземления
-        timeToBePickedUp = 0f; // Установите минимальное время задержки для первого падения
+        // Уничтожаем только динамические тени
+        if (dynamicShadow != null && !shadowIsFixed)
+        {
+            Destroy(dynamicShadow);
+        }
     }
 }

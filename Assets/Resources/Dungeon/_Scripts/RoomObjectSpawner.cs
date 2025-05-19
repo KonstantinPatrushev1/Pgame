@@ -193,6 +193,8 @@ public class RoomObjectSpawner : MonoBehaviour
             }
         }
         spawnedObjects.Clear();
+        
+        
 
         foreach (Transform child in transform)
         {
