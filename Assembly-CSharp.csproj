@@ -49,6 +49,7 @@
     <Compile Include="Assets\Scripts\Interface\ParametrsHP.cs" />
     <Compile Include="Assets\Scripts\Interface\ParametrsStamina.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
+    <Compile Include="Assets\Scripts\Items\ShadowManager.cs" />
     <Compile Include="Assets\Resources\Dungeon\_Scripts\Data\WallGenerator.cs" />
     <Compile Include="Assets\Resources\Dungeon\_Scripts\TilemapVisualizer.cs" />
     <Compile Include="Assets\Resources\Dungeon\_Scripts\CorridorFirstDangeounGenerator.cs" />
@@ -140,7 +141,6 @@
     <Compile Include="Assets\Resources\Dungeon\_Scripts\TorchFlicker.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Resources\Dungeon\_Scripts\RoomFirstDungeonGenerator.cs" />
-    <Compile Include="Assets\Scripts\Items\ShadowManager.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

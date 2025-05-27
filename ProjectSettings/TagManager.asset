@@ -16,6 +16,8 @@ TagManager:
   - Pickaxe
   - Arrow
   - AttractTarget
+  - Tree
+  - Stone
   layers:
   - Default
   - TransparentFX

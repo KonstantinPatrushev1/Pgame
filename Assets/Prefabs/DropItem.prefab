@@ -111,8 +111,9 @@ MonoBehaviour:
   attractStartDistance: 1
   shadowPrefab: {fileID: 943108458976941216, guid: 56f60d8de9731024ebc76d4567a99a4c,
     type: 3}
-  shadowOffset: 0.7
   shadowScale: 0.8
+  shadowVerticalOffset: 0.2
+  hitSound: {fileID: 8300000, guid: c450922068f0a5043b66968bbba8a4b7, type: 3}
 --- !u!61 &-4593284110157164778
 BoxCollider2D:
   m_ObjectHideFlags: 0

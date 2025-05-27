@@ -135,7 +135,9 @@ MonoBehaviour:
   dropItemID: 1
   dropCount: 3
   isTool: 0
-  data: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: cc624bcfc910bd54f9d7892e1583424d, type: 3}
+  breakParticlesPrefab: {fileID: 8244834969576949103, guid: 8d1f715235e578c4cba44539c509d9f5,
+    type: 3}
 --- !u!114 &7627839871806696909
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,20 +17,23 @@ public class WeaponManager : MonoBehaviour
     {
         switch (weaponId)
         {
-            case 7:
-                weaponSprite = Resources.Load<Sprite>("axe");
-                damage = 10;
-                customCollider = new Vector2[] // Используем существующую переменную
+            case -1:
+                // Логика для пустого состояния оружия
+                weaponSprite = null;  // Или другое значение для пустого оружия
+                damage = 0;
+                customCollider = new Vector2[0];  // Пустой коллайдер
+                break;
+            case 3:
+                weaponSprite = Resources.Load<Sprite>("iron_sword");
+                damage = 100;
+                customCollider = new Vector2[]
                 {
-                    new Vector2(0.54f, 0.68f),
-                    new Vector2(-0.04f, 0.05522266f),
-                    new Vector2(0.08f, -0.03656036f),
-                    new Vector2(0.65f, 0.56f),
-                    new Vector2(0.45f, 0.15f),
-                    new Vector2(0.83f, 0.54f)
+                    new Vector2(0.6361573f, 0.7797551f),
+                    new Vector2(-0.06085439f, 0.07027919f),
+                    new Vector2(0.05852706f, -0.06126295f),
+                    new Vector2(0.7786385f, 0.6262706f)
                 };
                 break;
-            
             case 4:
                 weaponSprite = Resources.Load<Sprite>("palka");
                 damage = 10;
@@ -42,7 +45,6 @@ public class WeaponManager : MonoBehaviour
                     new Vector2(0.7065791f, 0.9573961f)
                 };
                 break;
-
             case 5:
                 weaponSprite = Resources.Load<Sprite>("wood_sword");
                 damage = 50;
@@ -59,24 +61,35 @@ public class WeaponManager : MonoBehaviour
                 damage = 50;
                 customCollider = new Vector2[0];
                 break;
-            
-            case 3:
-                weaponSprite = Resources.Load<Sprite>("iron_sword");
-                damage = 100;
-                customCollider = new Vector2[]
+            case 7:
+                weaponSprite = Resources.Load<Sprite>("axe");
+                damage = 10;
+                customCollider = new Vector2[] // Используем существующую переменную
                 {
-                    new Vector2(0.6361573f, 0.7797551f),
-                    new Vector2(-0.06085439f, 0.07027919f),
-                    new Vector2(0.05852706f, -0.06126295f),
-                    new Vector2(0.7786385f, 0.6262706f)
+                    new Vector2(0.54f, 0.68f),
+                    new Vector2(-0.04f, 0.05522266f),
+                    new Vector2(0.08f, -0.03656036f),
+                    new Vector2(0.65f, 0.56f),
+                    new Vector2(0.45f, 0.15f),
+                    new Vector2(0.83f, 0.54f)
                 };
                 break;
-            case -1:
-                // Логика для пустого состояния оружия
-                weaponSprite = null;  // Или другое значение для пустого оружия
-                damage = 0;
-                customCollider = new Vector2[0];  // Пустой коллайдер
+            case 8:
+                weaponSprite = Resources.Load<Sprite>("pickaxe");
+                damage = 10;
+                customCollider = new Vector2[] // Используем существующую переменную
+                {
+                    new Vector2(0.24211f, 0.760593f),
+                    new Vector2(0.455798f, 0.5899508f),
+                    new Vector2(-0.04f, -0.05522266f),
+                    new Vector2(0.08f, -0.03656036f),
+                    new Vector2(0.6188143f, 0.46852f),
+                    new Vector2(0.7749526f, 0.2307977f),
+                    new Vector2(0.7896845f, 0.5179201f),
+                    new Vector2(0.5487287f, 0.7835162f)
+                };
                 break;
+
         }
 
         ChangeSwordSprite();

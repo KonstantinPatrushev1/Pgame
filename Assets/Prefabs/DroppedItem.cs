@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,11 +47,15 @@ public class DroppedItem : MonoBehaviour
     [Header("Shadow Settings")]
     public GameObject shadowPrefab;
     public float shadowScale = 0.8f;
-    public float shadowVerticalOffset = 0.2f;
+    public float shadowVerticalOffset = 0.3f;
     private GameObject dynamicShadow;
     private bool shadowIsFixed = false;
     private Vector3 fixedShadowPosition;
+    
+    public AudioClip hitSound;
+    private AudioSource audioSource;
 
+    
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -70,6 +75,11 @@ public class DroppedItem : MonoBehaviour
             dynamicShadow = Instantiate(shadowPrefab, transform.position, Quaternion.identity);
             dynamicShadow.transform.localScale = Vector3.one * shadowScale;
         }
+    }
+
+    private void Start()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void Initialize(Vector3 startPosition, float throwDirectionY, bool isDropObject)
@@ -270,14 +280,13 @@ public class DroppedItem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && hasLanded && canBePickedUp && !isAttracting)
+        // Добавляем проверку isBeingPickedUp
+        if (other.CompareTag("Player") && hasLanded && canBePickedUp && !isAttracting && !isBeingPickedUp)
         {
-            // Удаляем тень перед притягиванием
             if (dynamicShadow != null)
             {
                 ShadowManager.Instance.UnregisterShadow(dynamicShadow);
                 Destroy(dynamicShadow);
-                dynamicShadow = null;
             }
         
             if (attractTarget != null)
@@ -286,26 +295,53 @@ public class DroppedItem : MonoBehaviour
                 startSwaying = false;
             }
         }
-        else if (other.CompareTag("AttractTarget") && hasLanded && canBePickedUp)
+        else if (other.CompareTag("AttractTarget") && hasLanded && canBePickedUp && !isBeingPickedUp)
         {
             TryPickup();
         }
     }
 
+    private bool isBeingPickedUp = false;
+
     private void TryPickup()
     {
-        // Удаляем тень перед подбором
+        // Если уже начали подбирать — выходим
+        if (isBeingPickedUp) return;
+    
+        isBeingPickedUp = true; // Блокируем повторные вызовы
+
         if (dynamicShadow != null)
         {
             ShadowManager.Instance.UnregisterShadow(dynamicShadow);
             Destroy(dynamicShadow);
         }
 
-        if (istool)
-        {
-            count = 1;
-        }
+        if (istool) count = 1;
+
         inventory.AddItemToInventory(this);
+
+        // Отключаем визуал и коллайдер
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+
+        // Проигрываем звук только если он есть
+        if (hitSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hitSound, 0.3f);
+            StartCoroutine(DestroyAfterSound());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    private IEnumerator DestroyAfterSound()
+    {
+        // Ждем, пока звук закончится (hitSound.length + небольшой запас)
+        yield return new WaitForSeconds(hitSound.length + 0.1f);
+
+        // Уничтожаем объект
         Destroy(gameObject);
     }
 

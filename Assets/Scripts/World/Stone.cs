@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,6 +15,14 @@ public class Stone : MonoBehaviour
     public int dropItemID; // ID предмета, который выпадет
     public int dropCount = 1; // Количество выпадающих предметов
     public bool isTool = false; // Является ли предмет инструментом
+    
+    public AudioClip hitSound;
+    
+    public ParticleSystem breakParticlesPrefab; // Префаб ParticleSystem
+    
+    private ParticleSystem myParticles; // Ссылка на созданную систему
+    
+    private AudioSource audioSource;
 
     private int currentHP;
     private float lastDamageTime;
@@ -25,6 +34,17 @@ public class Stone : MonoBehaviour
     
     void Start()
     {
+        if (breakParticlesPrefab != null)
+        {
+            myParticles = Instantiate(breakParticlesPrefab, transform.position, Quaternion.identity);
+            
+            myParticles.transform.SetParent(transform);
+            
+            myParticles.Stop();
+        }
+        
+        audioSource = gameObject.AddComponent<AudioSource>();
+        
         data = FindObjectOfType<DataBase>();
         currentHP = maxHP;
         lastDamageTime = -damageCooldown;
@@ -68,16 +88,38 @@ public class Stone : MonoBehaviour
     {
         currentHP--;
         StartShaking();
-        
+    
+        audioSource.PlayOneShot(hitSound, 0.1f);
+        myParticles.Play();
+    
         if (currentHP <= 0)
         {
-            DropItem();
-            Destroy(gameObject);
+            // Отключаем визуальную часть (рендерер, коллайдер и тень)
+            GetComponent<Collider2D>().enabled = false;
+            GetComponent<SpriteRenderer>().enabled = false;
+        
+            // Находим и отключаем дочерний объект с тенью
+            Transform shadow = transform.Find("bigStoneShadow1"); // Или другое имя, если у вас тень называется иначе
+            Transform shadow2 = transform.Find("bigStoneShadow2");
+            if (shadow != null)
+            {
+                shadow.gameObject.SetActive(false);
+            }
+            if (shadow2 != null)
+            {
+                shadow2.gameObject.SetActive(false);
+            }
+        
+            // Запускаем корутину для задержки перед уничтожением
+            StartCoroutine(DestroyAfterSound());
         }
-        else
-        {
-            Debug.Log("Камень получил урон! Осталось HP: " + currentHP);
-        }
+    }
+
+    IEnumerator DestroyAfterSound()
+    {
+        DropItem();
+        yield return new WaitForSeconds(hitSound.length);
+        Destroy(gameObject);
     }
 
     void DropItem()
@@ -139,6 +181,13 @@ public class Stone : MonoBehaviour
         {
             isShaking = false;
             transform.position = originalPosition;
+        }
+    }
+    void OnDestroy()
+    {
+        if (myParticles != null)
+        {
+            Destroy(myParticles.gameObject);
         }
     }
 }

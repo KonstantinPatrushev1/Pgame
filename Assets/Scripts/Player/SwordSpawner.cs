@@ -74,7 +74,7 @@ public class SwordSpawner : MonoBehaviour
 
     void Update()
 {
-    if (WeaponManager.instance.weaponId == 7)
+    if (WeaponManager.instance.weaponId == 8)
     {
         sword.tag = "Pickaxe";
     }
@@ -114,7 +114,7 @@ public class SwordSpawner : MonoBehaviour
         // Основной расчёт sortingOrder на основе Y координаты
         if (sword.transform.position.y > transform.position.y)
         {
-            swordRenderer.sortingOrder = -1 * Mathf.RoundToInt(transform.position.y * 100f);
+            swordRenderer.sortingOrder = -1 * Mathf.RoundToInt(transform.position.y * 100f) - 1;
         }
         else
         {
