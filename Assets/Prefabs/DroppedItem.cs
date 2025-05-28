@@ -55,7 +55,9 @@ public class DroppedItem : MonoBehaviour
     public AudioClip hitSound;
     private AudioSource audioSource;
 
-    
+    public PanelAnimator panelAnimator;
+
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -102,6 +104,10 @@ public class DroppedItem : MonoBehaviour
         if (inventory == null)
         {
             inventory = FindObjectOfType<Inventory>();
+        }
+        if (panelAnimator == null)
+        {
+            panelAnimator = FindObjectOfType<PanelAnimator>();
         }
         if (visualObject == null)
         {
@@ -305,10 +311,9 @@ public class DroppedItem : MonoBehaviour
 
     private void TryPickup()
     {
-        // Если уже начали подбирать — выходим
         if (isBeingPickedUp) return;
     
-        isBeingPickedUp = true; // Блокируем повторные вызовы
+        isBeingPickedUp = true;
 
         if (dynamicShadow != null)
         {
@@ -317,14 +322,14 @@ public class DroppedItem : MonoBehaviour
         }
 
         if (istool) count = 1;
+        PanelAnimator.ShowItemPanel(itemID, count);
 
         inventory.AddItemToInventory(this);
 
-        // Отключаем визуал и коллайдер
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
+        
 
-        // Проигрываем звук только если он есть
         if (hitSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(hitSound, 0.3f);

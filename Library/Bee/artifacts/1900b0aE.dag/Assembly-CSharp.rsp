@@ -422,6 +422,7 @@
 "Assets/Scripts/Interface/InventoryButton.cs"
 "Assets/Scripts/Interface/MapController.cs"
 "Assets/Scripts/Interface/MenuSlotManager.cs"
+"Assets/Scripts/Interface/PanelAnimator.cs"
 "Assets/Scripts/Interface/PanelMover.cs"
 "Assets/Scripts/Interface/ParametrsHP.cs"
 "Assets/Scripts/Interface/ParametrsStamina.cs"

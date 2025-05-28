@@ -114,6 +114,7 @@ MonoBehaviour:
   shadowScale: 0.8
   shadowVerticalOffset: 0.2
   hitSound: {fileID: 8300000, guid: c450922068f0a5043b66968bbba8a4b7, type: 3}
+  panelAnimator: {fileID: 0}
 --- !u!61 &-4593284110157164778
 BoxCollider2D:
   m_ObjectHideFlags: 0
