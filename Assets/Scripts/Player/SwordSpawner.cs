@@ -36,6 +36,8 @@ public class SwordSpawner : MonoBehaviour
     public GameObject StatuePanel;
     public GameObject SavePanel;
     public GameObject TeleportPanel;
+    
+    private bool isFirstAttackAfterPanel = false;
 
 
     void Start()
@@ -102,6 +104,7 @@ public class SwordSpawner : MonoBehaviour
         // Останавливаем вращение меча и скрываем его, если инвентарь открыт
         isRotating = false;
         sword.SetActive(false);  // Скрываем меч
+        isFirstAttackAfterPanel = true;
 
         // Сбрасываем таймер атаки, если инвентарь или карта закрыты
         attackTimer = 0f;
@@ -130,13 +133,14 @@ public class SwordSpawner : MonoBehaviour
     attackTimer += Time.deltaTime;
 
     // Обрабатываем нажатие ЛКМ
-    if (Input.GetMouseButtonDown(0) && !isRotating && attackTimer >= attackCooldown)
+    if (Input.GetMouseButtonDown(0) && !isRotating && (isFirstAttackAfterPanel || attackTimer >= attackCooldown))
     {
         // Если оружие выбрано
         if (HasWeaponEquipped())
         {
             // Сбрасываем таймер задержки атаки
             attackTimer = 0f;
+            isFirstAttackAfterPanel = false;
 
             // Показываем меч
             sword.SetActive(true);
@@ -292,4 +296,3 @@ public class SwordSpawner : MonoBehaviour
 
 
 }
-

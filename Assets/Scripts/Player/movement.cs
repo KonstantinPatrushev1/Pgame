@@ -112,6 +112,7 @@ void FixedUpdate()
 
     if (!isAttacking)
     {
+        UpdateAnimation();
         rb.velocity = movementInput.normalized * moveSpeed;
     }
     else

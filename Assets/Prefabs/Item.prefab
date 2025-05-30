@@ -289,5 +289,14 @@ MonoBehaviour:
   count: 0
   istool: 0
   startSwaying: 0
-  dropEndPosition: {x: 0, y: 0, z: 0}
+  dropDirection: {x: 0, y: 0, z: 0}
   inventory: {fileID: 0}
+  defaultHeightRange: 0.5
+  verticalThrowExtraRange: 1.5
+  attractSpeed: 5
+  attractStartDistance: 1
+  shadowPrefab: {fileID: 0}
+  shadowScale: 0.8
+  shadowVerticalOffset: 0.3
+  hitSound: {fileID: 0}
+  panelAnimator: {fileID: 0}
